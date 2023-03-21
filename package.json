@@ -9,11 +9,11 @@
     "email": "eliott.jaquier@gmail.com",
     "url": "https://eliott.pro"
   },
-  "samples": {
+  "samples": [
     {
       "displayName": "Adaptive Music Exemple",
       "description": "An exemple of how to use the Adaptive Music Manager",
       "path": "Music"
     }
-  }
+  ]
 }
