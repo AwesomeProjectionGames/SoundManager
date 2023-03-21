@@ -2,7 +2,7 @@
   "name": "com.awesomeprojection.soundmanager",
   "displayName": "Sound Manager",
   "description": "Scrips utilities for sound management in Unity with AudioSources and AudioClips",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "unity": "2021.3",
   "author": {
     "name": "Eliott Jaquier",
