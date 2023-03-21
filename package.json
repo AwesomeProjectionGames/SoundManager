@@ -13,7 +13,7 @@
     {
       "displayName": "Adaptive Music Exemple",
       "description": "An exemple of how to use the Adaptive Music Manager",
-      "path": "Music"
+      "path": "Samples~/Music"
     }
   ]
 }
