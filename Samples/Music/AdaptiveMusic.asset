@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1090bc46c679d43438b1b932c101af57, type: 3}
+  m_Name: AdaptiveMusic
+  m_EditorClassIdentifier: 
+  intensityParameters:
+  - musicLoops:
+    - {fileID: 8300000, guid: 8167ae3cfa2bdad46b8aa658f1fc9ae9, type: 3}
+    - {fileID: 8300000, guid: 0176d2faef56e5e4385d18e994570992, type: 3}
+    - {fileID: 8300000, guid: 263b1173ed8445d4d9cb96108eb05a87, type: 3}
+    volume: 0.5
+    crossFadeDuration: 5
+    stinger: {fileID: 8300000, guid: 75ff8b03275a48c4da9b5f983d4475f1, type: 3}
+    playStingerFullVolume: 0
+    waitForEndStinger: 0
+  - musicLoops:
+    - {fileID: 8300000, guid: 8a16a01dce9895a42a4422de0c1654c5, type: 3}
+    - {fileID: 8300000, guid: fcf30a3ac97a2e74d9cc189bc5bb9ce2, type: 3}
+    - {fileID: 8300000, guid: ccde54992c8eebc4c99f83b124ba5032, type: 3}
+    volume: 0.7
+    crossFadeDuration: 2
+    stinger: {fileID: 8300000, guid: de70132587d21d7429fa4b0ca7a59cc5, type: 3}
+    playStingerFullVolume: 0
+    waitForEndStinger: 0
+  - musicLoops:
+    - {fileID: 8300000, guid: b7252bef34d92664b981d8454ea72ede, type: 3}
+    - {fileID: 8300000, guid: 81dfc25f9050eb24f9feed471b2383c6, type: 3}
+    - {fileID: 8300000, guid: f0c7f355cdd7b964181ab83b90f22dd2, type: 3}
+    volume: 0.9
+    crossFadeDuration: 0
+    stinger: {fileID: 8300000, guid: ebb7dea8b9873af4494c206ff8187a2d, type: 3}
+    playStingerFullVolume: 0
+    waitForEndStinger: 1
+  stopFadeDuration: 2

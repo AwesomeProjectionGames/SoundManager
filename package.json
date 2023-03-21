@@ -1,0 +1,19 @@
+{
+  "name": "com.awesomeprojection.soundmanager",
+  "displayName": "Sound Manager",
+  "description": "Scrips utilities for sound management in Unity with AudioSources and AudioClips",
+  "version": "1.1.0",
+  "unity": "2021.3",
+  "author": {
+    "name": "Eliott Jaquier",
+    "email": "eliott.jaquier@gmail.com",
+    "url": "https://eliott.pro"
+  },
+  "samples": {
+    {
+      "displayName": "Adaptive Music Exemple",
+      "description": "An exemple of how to use the Adaptive Music Manager",
+      "path": "Music"
+    }
+  }
+}
