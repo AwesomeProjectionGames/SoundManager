@@ -47,7 +47,7 @@ namespace SoundManager
                 audioSource.pitch = Mathf.Lerp(audioSource.pitch, targetPitch, Time.deltaTime * motorPitchChangeReactivity);
                 if (optionnalTiresOnRoad != null)
                 {
-                    optionnalTiresOnRoad.volume = actualTargetSpeed;
+                    optionnalTiresOnRoad.volume = Mathf.Lerp(optionnalTiresOnRoad.volume, actualTargetSpeed, Time.deltaTime * motorPitchChangeReactivity);
                 }
             }
             if (targetThrust != audioSource.volume)
