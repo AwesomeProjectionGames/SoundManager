@@ -20,7 +20,7 @@ namespace SoundManager
         AudioSource optionnalTiresOnRoad;
 
         [SerializeField]
-        private bool startEngineOnAwake = true;
+        private bool startEngineOnEnable = true;
 
         private AudioSource audioSource;
         private AudioLowPassFilter lowPassFilter;
@@ -29,15 +29,20 @@ namespace SoundManager
         private float targetThrust;
         private bool isEngineStarted = false;
 
-        private void Awake()
+        private void OnEnable()
         {
             audioSource = GetComponent<AudioSource>();
             audioSource.playOnAwake = false;
             lowPassFilter = GetComponent<AudioLowPassFilter>();
-            if (startEngineOnAwake)
+            if (startEngineOnEnable)
             {
                 StartEngine();
             }
+        }
+
+        private void OnDisable()
+        {
+            StopEngine();
         }
 
         private void Update()

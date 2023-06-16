@@ -32,6 +32,7 @@ namespace SoundManager
         private bool isFading = false;
         [SerializeField]
         private bool fadeInWhenEnabled = false;
+
         void Start()
         {
             if (fadeInAtStart)
@@ -40,6 +41,7 @@ namespace SoundManager
             }
             if (dontDestroyOnLoadForFadeOut)
             {
+                transform.parent = null;
                 DontDestroyOnLoad(gameObject);
                 SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
             }
@@ -56,6 +58,14 @@ namespace SoundManager
             {
                 fadeInWhenEnabled = false;
                 FadeIn();
+            }
+        }
+
+        void OnDisable()
+        {
+            if (dontDestroyOnLoadForFadeOut)
+            {
+                SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
             }
         }
 
