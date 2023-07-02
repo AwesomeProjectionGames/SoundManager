@@ -100,6 +100,7 @@ namespace SoundManager
             actualTargetSpeed = 0;
             targetPitch = motorMinimumPitch;
             targetThrust = 0;
+            isEngineStarted = false;
         }
 
         /// <summary>
