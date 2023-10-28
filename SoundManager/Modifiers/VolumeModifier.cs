@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SoundManager.Modifier
 {
@@ -8,12 +9,12 @@ namespace SoundManager.Modifier
     [System.Serializable]
     public class VolumeModifier : IAudioModifierComponent
     {
-        [SerializeField] private float minPitch = 0.8f;
-        [SerializeField] private float maxPitch = 1.2f;
+        [FormerlySerializedAs("minPitch")] [SerializeField] private float minVolume = 0.8f;
+        [FormerlySerializedAs("maxPitch")] [SerializeField] private float maxVolume = 1.2f;
         public override void ModifyAudio(AudioSource audioSource)
         {
             if (!enabled) return;
-            audioSource.pitch = Random.Range(minPitch, maxPitch);
+            audioSource.volume = Random.Range(minVolume, maxVolume);
         }
     }
 }
