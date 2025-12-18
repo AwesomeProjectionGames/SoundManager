@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SoundManager
 {
-    [CreateAssetMenu(fileName = "Playlist", menuName = "SoundManager/AudioRadioPlaylist")]
+    [CreateAssetMenu(fileName = "Playlist", menuName = "AwesomeProjection/SoundManager/AudioRadioPlaylist")]
     public class AudioRadioPlaylist : ScriptableObject
     {
         /// <summary>

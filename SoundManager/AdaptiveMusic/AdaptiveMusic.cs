@@ -7,7 +7,7 @@ namespace SoundManager.AdaptiveMusic {
     /// <summary>
     /// Scriptable object that contains all the data for an adaptive music mix
     /// </summary>
-    [CreateAssetMenu(fileName = "AdaptiveMusic", menuName = "SoundManager/AdaptiveMusic", order = 1)]
+    [CreateAssetMenu(fileName = "AdaptiveMusic", menuName = "AwesomeProjection/SoundManager/AdaptiveMusic", order = 1)]
     public class AdaptiveMusic : ScriptableObject
     {
         // List of audio clips for different intensity levels
