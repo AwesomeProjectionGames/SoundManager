@@ -19,41 +19,55 @@ namespace SoundManager.VirtualListeners
         public bool updateListenerWhilePlaying = false;
         private AudioListenerVirtual _cachedListener;
     
-        // State tracking to detect changes
-        private bool _wasPlaying;
+        private bool _wasPlaying; // Kept for logic if needed, but primary logic is now state-based
 
         private void Awake()
         {
             _originalSource = GetComponent<AudioSource>();
-            CreateShadowProxy();
-        }
-
-        private void CreateShadowProxy()
-        {
-            if (VirtualAudioManager.Instance == null) return;
-
-            // Create a ghost object in the Reference World
-            GameObject ghost = new GameObject($"Shadow_{gameObject.name}");
-            _proxyTransform = ghost.transform;
-        
-            // Parent to the Void anchor so it moves relative to the listener correctly
-            Transform voidAnchor = VirtualAudioManager.Instance.transform;
-            _proxyTransform.SetParent(voidAnchor);
-
-            // Add the mirror AudioSource
-            _proxySource = ghost.AddComponent<AudioSource>();
-            _proxySource.playOnAwake = false;
         }
 
         private void Update()
         {
-            if (_proxySource == null || VirtualAudioManager.Instance == null) return;
+            if (VirtualAudioManager.Instance == null) return;
 
             // We force the original to be muted so it processes logic (time, loop) but emits no sound.
             if (!_originalSource.mute) _originalSource.mute = true;
-            SyncAudioProperties();
-            PositionProxy();
-            HandlePlaybackState();
+
+            bool isPlaying = _originalSource.isPlaying;
+
+            if (isPlaying)
+            {
+                if (_proxySource == null)
+                {
+                    _proxySource = VirtualAudioManager.Instance.GetProxySource();
+                    _proxyTransform = _proxySource.transform;
+                    
+                    // Sync playhead and state immediately
+                    SyncAudioProperties();
+                    _proxySource.time = _originalSource.time;
+                    _proxySource.Play();
+                }
+
+                SyncAudioProperties();
+                PositionProxy();
+
+                // Drift Correction
+                if (Mathf.Abs(_proxySource.time - _originalSource.time) > 0.1f)
+                {
+                    _proxySource.time = _originalSource.time;
+                }
+            }
+            else
+            {
+                if (_proxySource != null)
+                {
+                    VirtualAudioManager.Instance.ReturnProxySource(_proxySource);
+                    _proxySource = null;
+                    _proxyTransform = null;
+                }
+            }
+            
+            _wasPlaying = isPlaying;
         }
 
         private void PositionProxy()
@@ -106,37 +120,25 @@ namespace SoundManager.VirtualListeners
                 _proxySource.clip = _originalSource.clip;
         }
 
-        private void HandlePlaybackState()
+        private void OnDisable()
         {
-            // Detect if the original started or stopped playing
-            bool isOriginalPlaying = _originalSource.isPlaying;
-
-            if (isOriginalPlaying && !_wasPlaying)
+            if (_proxySource != null)
             {
-                // Original just started
-                _proxySource.time = _originalSource.time; // Sync playhead
-                _proxySource.Play();
+                // Use ?. in case VirtualAudioManager is already destroyed (e.g. app quit)
+                VirtualAudioManager.Instance?.ReturnProxySource(_proxySource);
+                _proxySource = null;
+                _proxyTransform = null;
             }
-            else if (!isOriginalPlaying && _wasPlaying)
-            {
-                // Original just stopped
-                _proxySource.Stop();
-            }
-            else if (isOriginalPlaying && _wasPlaying)
-            {
-                // Drift Correction: If the proxy drifts too far from original time, snap it
-                if (Mathf.Abs(_proxySource.time - _originalSource.time) > 0.1f)
-                {
-                    _proxySource.time = _originalSource.time;
-                }
-            }
-
-            _wasPlaying = isOriginalPlaying;
         }
 
         private void OnDestroy()
         {
-            if (_proxyTransform != null) Destroy(_proxyTransform.gameObject);
+            if (_proxySource != null)
+            {
+                VirtualAudioManager.Instance?.ReturnProxySource(_proxySource);
+                _proxySource = null;
+                _proxyTransform = null;
+            }
         }
     }
 }

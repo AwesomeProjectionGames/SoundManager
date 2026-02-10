@@ -34,6 +34,44 @@ namespace SoundManager.VirtualListeners
         private List<AudioListenerVirtual> _listeners = new List<AudioListenerVirtual>();
         private AudioListener _realAudioListener = null!;
 
+        // Pool for proxy audio sources to avoid constant instantiation/destruction
+        private Queue<AudioSource> _proxyPool = new Queue<AudioSource>();
+
+        /// <summary>
+        /// Retrieves an AudioSource from the pool or creates a new one.
+        /// </summary>
+        public AudioSource GetProxySource()
+        {
+            AudioSource source;
+            if (_proxyPool.Count > 0)
+            {
+                source = _proxyPool.Dequeue();
+            }
+            else
+            {
+                GameObject obj = new GameObject("AudioProxy");
+                obj.transform.SetParent(transform);
+                source = obj.AddComponent<AudioSource>();
+                source.playOnAwake = false;
+            }
+            
+            source.gameObject.SetActive(true);
+            return source;
+        }
+
+        /// <summary>
+        /// Returns an AudioSource to the pool.
+        /// </summary>
+        public void ReturnProxySource(AudioSource source)
+        {
+            if (source == null) return;
+            
+            source.Stop();
+            source.clip = null;
+            source.gameObject.SetActive(false);
+            _proxyPool.Enqueue(source);
+        }
+
         /// <summary>
         /// Registers a virtual listener with the manager.
         /// </summary>
