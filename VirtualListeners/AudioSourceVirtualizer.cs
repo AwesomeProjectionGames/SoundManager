@@ -1,5 +1,4 @@
-﻿using AwesomeProjectionCoreUtils.Extensions;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SoundManager.VirtualListeners
 {
@@ -9,17 +8,9 @@ namespace SoundManager.VirtualListeners
     /// the relative position of the sound source to the closest virtual listener.
     /// </summary>
     [RequireComponent(typeof(AudioSource))]
-    public class AudioSourceVirtualizer : MonoBehaviour
+    public class AudioSourceVirtualizer : VirtualAudioSourceBase
     {
         private AudioSource _originalSource;
-        private AudioSource _proxySource;
-        private Transform _proxyTransform;
-
-        [Tooltip("If true, the closest listener is constantly updated. If false, it is locked when playback starts.")]
-        public bool updateListenerWhilePlaying = false;
-        private AudioListenerVirtual _cachedListener;
-    
-        private bool _wasPlaying; // Kept for logic if needed, but primary logic is now state-based
 
         private void Awake()
         {
@@ -39,8 +30,7 @@ namespace SoundManager.VirtualListeners
             {
                 if (_proxySource == null)
                 {
-                    _proxySource = VirtualAudioManager.Instance.GetProxySource();
-                    _proxyTransform = _proxySource.transform;
+                    EnsureProxy();
                     
                     // Sync playhead and state immediately
                     SyncAudioProperties();
@@ -49,7 +39,7 @@ namespace SoundManager.VirtualListeners
                 }
 
                 SyncAudioProperties();
-                PositionProxy();
+                UpdateProxyPosition(isPlaying);
 
                 // Drift Correction
                 if (Mathf.Abs(_proxySource.time - _originalSource.time) > 0.1f)
@@ -59,47 +49,10 @@ namespace SoundManager.VirtualListeners
             }
             else
             {
-                if (_proxySource != null)
-                {
-                    VirtualAudioManager.Instance.ReturnProxySource(_proxySource);
-                    _proxySource = null;
-                    _proxyTransform = null;
-                }
+                ReleaseProxy();
             }
             
             _wasPlaying = isPlaying;
-        }
-
-        private void PositionProxy()
-        {
-            AudioListenerVirtual closestListener;
-
-            if (!updateListenerWhilePlaying && _originalSource.isPlaying)
-            {
-                if (!_wasPlaying || _cachedListener == null)
-                {
-                    _cachedListener = VirtualAudioManager.Instance.GetClosestListener(transform.position);
-                }
-                closestListener = _cachedListener;
-            }
-            else
-            {
-                closestListener = VirtualAudioManager.Instance.GetClosestListener(transform.position);
-            }
-        
-            if (closestListener.IsAlive())
-            {
-                // Calculate relative offset from the virtual ear
-                Vector3 relativePos = closestListener!.transform.InverseTransformPoint(transform.position);
-            
-                // Apply that offset to the Real Listener in the Void
-                Transform voidAnchor = VirtualAudioManager.Instance.transform;
-                _proxyTransform.position = voidAnchor.TransformPoint(relativePos);
-            }
-            else
-            {
-                _proxyTransform.localPosition = new Vector3(0, 0, 0);
-            }
         }
 
         private void SyncAudioProperties()
@@ -118,27 +71,6 @@ namespace SoundManager.VirtualListeners
             // Only swap clip if changed (optimization)
             if (_proxySource.clip != _originalSource.clip)
                 _proxySource.clip = _originalSource.clip;
-        }
-
-        private void OnDisable()
-        {
-            if (_proxySource != null)
-            {
-                // Use ?. in case VirtualAudioManager is already destroyed (e.g. app quit)
-                VirtualAudioManager.Instance?.ReturnProxySource(_proxySource);
-                _proxySource = null;
-                _proxyTransform = null;
-            }
-        }
-
-        private void OnDestroy()
-        {
-            if (_proxySource != null)
-            {
-                VirtualAudioManager.Instance?.ReturnProxySource(_proxySource);
-                _proxySource = null;
-                _proxyTransform = null;
-            }
         }
     }
 }

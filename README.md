@@ -16,7 +16,9 @@ Then, it will create a copy of the audio source near the real audio listener wit
 
 ### How to Use
 1. Add the `VirtualAudioListener` component to each of your listener game objects (e.g., player cameras). Remove `AudioListener` component. It will be automatically added.
-2. Add the `AudioSourceVirtualizer` component next to each of your audio sources (**only spatialized audio sources for performance**).
+2. Use one of the two following components for spatialized audio sources:
+    - **AudioSourceVirtual** (Recommended): A standalone component replacing the standard `AudioSource`. It is more efficient as it directly manages the virtual proxy.
+    - **AudioSourceVirtualizer**: Attach this component next to an existing `AudioSource`. It will automatically virtualize the source when it plays. Use this if you have existing scripts depending on `AudioSource` that you can't easily change.
 
 ## Installation
 To install this package, you can use the Unity Package Manager. To do so, open the Unity Package Manager and click on the `+` button in the top left corner. Then select `Add package from git URL...` and enter the following URL:
