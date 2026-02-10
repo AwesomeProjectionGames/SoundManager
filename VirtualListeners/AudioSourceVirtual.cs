@@ -75,6 +75,18 @@ namespace SoundManager.VirtualListeners
             _wasPlaying = shouldBeActive;
         }
 
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawIcon(transform.position, "AudioSource Gizmo", true);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = new Color(0.5f, 0.5f, 1.0f, 0.5f);
+            Gizmos.DrawWireSphere(transform.position, minDistance);
+            Gizmos.DrawWireSphere(transform.position, maxDistance);
+        }
+
         public void Play()
         {
             EnsureProxy();
