@@ -35,8 +35,8 @@ namespace SoundManager
 
         private void Awake()
         {
-            if (audioSource == null) audioSource = GetComponent<AudioSource>();
-            if (audioSourceVirtual == null) audioSourceVirtual = GetComponent<AudioSourceVirtual>();
+            if (audioSource == null && audioSourceVirtual == null) audioSource = GetComponent<AudioSource>();
+            if (audioSource == null && audioSourceVirtual == null) audioSourceVirtual = GetComponent<AudioSourceVirtual>();
 
             if (!modifyWhenPlay)
                 ModifyAudio();
