@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SoundManager.VirtualListeners;
 namespace SoundManager
 {
     /// <summary>
@@ -10,6 +11,7 @@ namespace SoundManager
     public abstract class IAudioModifierComponent
     {
         [SerializeField] protected bool enabled = false;
-        abstract public void ModifyAudio(AudioSource audioSource);
+        public abstract void ModifyAudio(AudioSource audioSource);
+        public abstract void ModifyAudio(AudioSourceVirtual audioSource);
     }
 }

@@ -1,3 +1,6 @@
 {
-	"name": "SoundManager"
+	"name": "SoundManager",
+	"references": [
+		"VirtualListeners"
+	]
 }

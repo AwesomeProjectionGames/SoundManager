@@ -1,8 +1,6 @@
 using SoundManager.Modifier;
-using System.Collections;
-using System.Collections.Generic;
+using SoundManager.VirtualListeners;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace SoundManager
 {
@@ -13,6 +11,8 @@ namespace SoundManager
     {
         [Tooltip("The audio source to modify")]
         [SerializeField] private AudioSource audioSource;
+        [Tooltip("The virtual audio source to modify")]
+        [SerializeField] private AudioSourceVirtual audioSourceVirtual;
         [Tooltip("Modify the audio source eatch time the sound is played ? (Or only once at awake)")]
         [SerializeField] private bool modifyWhenPlay = true;
         [Tooltip("The pitch modifier of the audio source")]
@@ -28,9 +28,16 @@ namespace SoundManager
         /// Get the audio source direct reference
         /// </summary>
         public AudioSource AudioSource => audioSource;
+        /// <summary>
+        /// Get the virtual audio source direct reference
+        /// </summary>
+        public AudioSourceVirtual AudioSourceVirtual => audioSourceVirtual;
 
         private void Awake()
         {
+            if (audioSource == null) audioSource = GetComponent<AudioSource>();
+            if (audioSourceVirtual == null) audioSourceVirtual = GetComponent<AudioSourceVirtual>();
+
             if (!modifyWhenPlay)
                 ModifyAudio();
         }
@@ -41,7 +48,8 @@ namespace SoundManager
         {
             if (modifyWhenPlay)
                 ModifyAudio();
-            audioSource.Play();
+            if (audioSource != null) audioSource.Play();
+            if (audioSourceVirtual != null) audioSourceVirtual.Play();
         }
         /// <summary>
         /// Modify the audio source based on the modifier components
@@ -52,7 +60,8 @@ namespace SoundManager
                 audioModifierComponents = new IAudioModifierComponent[] { pitchModifier, volumeModifier, randomClipModifier, offsetModifier };
             foreach (var audioModifierComponent in audioModifierComponents)
             {
-                audioModifierComponent.ModifyAudio(audioSource);
+                if (audioSource != null) audioModifierComponent.ModifyAudio(audioSource);
+                if (audioSourceVirtual != null) audioModifierComponent.ModifyAudio(audioSourceVirtual);
             }
         }
     }

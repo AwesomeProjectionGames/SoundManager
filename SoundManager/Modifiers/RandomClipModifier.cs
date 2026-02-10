@@ -1,3 +1,4 @@
+using SoundManager.VirtualListeners;
 using UnityEngine;
 
 namespace SoundManager.Modifier
@@ -10,6 +11,11 @@ namespace SoundManager.Modifier
     {
         [SerializeField] private AudioClip[] clips;
         public override void ModifyAudio(AudioSource audioSource)
+        {
+            if (!enabled) return;
+            audioSource.clip = clips[Random.Range(0, clips.Length)];
+        }
+        public override void ModifyAudio(AudioSourceVirtual audioSource)
         {
             if (!enabled) return;
             audioSource.clip = clips[Random.Range(0, clips.Length)];

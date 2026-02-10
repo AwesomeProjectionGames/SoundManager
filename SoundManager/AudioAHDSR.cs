@@ -91,6 +91,10 @@ namespace SoundManager
         IEnumerator FadeInCoroutine()
         {
             yield return new WaitUntil(() => !isFading);
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
             float time = 0;
             float startVolume = 0;
             float endVolume = audioSource.volume;

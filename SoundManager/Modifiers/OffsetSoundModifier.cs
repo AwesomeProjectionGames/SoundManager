@@ -1,3 +1,4 @@
+using SoundManager.VirtualListeners;
 using UnityEngine;
 
 namespace SoundManager.Modifier
@@ -11,6 +12,11 @@ namespace SoundManager.Modifier
         [SerializeField] private float minOffset = 0f;
         [SerializeField] private float maxOffset = 1f;
         public override void ModifyAudio(AudioSource audioSource)
+        {
+            if (!enabled) return;
+            audioSource.time = Random.Range(minOffset, maxOffset);
+        }
+        public override void ModifyAudio(AudioSourceVirtual audioSource)
         {
             if (!enabled) return;
             audioSource.time = Random.Range(minOffset, maxOffset);
