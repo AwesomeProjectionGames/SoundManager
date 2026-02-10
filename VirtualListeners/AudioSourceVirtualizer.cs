@@ -3,6 +3,11 @@ using UnityEngine;
 
 namespace SoundManager.VirtualListeners
 {
+    /// <summary>
+    /// Synchronizes an original AudioSource with a proxy AudioSource positioned relative to the real AudioListener.
+    /// This allows for correct specific spatialization for multiple listeners (e.g. split-screen) by simulating
+    /// the relative position of the sound source to the closest virtual listener.
+    /// </summary>
     [RequireComponent(typeof(AudioSource))]
     public class AudioSourceVirtualizer : MonoBehaviour
     {

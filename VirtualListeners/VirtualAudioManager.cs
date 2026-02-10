@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace SoundManager.VirtualListeners
 {
+    /// <summary>
+    /// Manages virtual audio listeners and handles the setup of the real audio listener in the scene.
+    /// Acts as a central registry for all virtual listeners to help audio sources determine where they should be spatialized relative to.
+    /// </summary>
     public class VirtualAudioManager : MonoBehaviour
     {
         /// <summary>
@@ -30,9 +34,23 @@ namespace SoundManager.VirtualListeners
         private List<AudioListenerVirtual> _listeners = new List<AudioListenerVirtual>();
         private AudioListener _realAudioListener = null!;
 
+        /// <summary>
+        /// Registers a virtual listener with the manager.
+        /// </summary>
+        /// <param name="listener">The virtual listener to register.</param>
         public void RegisterListener(AudioListenerVirtual listener) => _listeners.Add(listener);
+
+        /// <summary>
+        /// Unregisters a virtual listener from the manager.
+        /// </summary>
+        /// <param name="listener">The virtual listener to unregister.</param>
         public void UnregisterListener(AudioListenerVirtual listener) => _listeners.Remove(listener);
 
+        /// <summary>
+        /// Finds the virtual listener closest to a given position.
+        /// </summary>
+        /// <param name="sourcePos">The position to check against.</param>
+        /// <returns>The closest AudioListenerVirtual, or null if none are registered.</returns>
         public AudioListenerVirtual? GetClosestListener(Vector3 sourcePos)
         {
             AudioListenerVirtual? closest = null;
