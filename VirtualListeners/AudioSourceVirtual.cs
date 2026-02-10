@@ -24,6 +24,21 @@ namespace SoundManager.VirtualListeners
         public bool playOnAwake = true;
 
         private float _lastOneShotEndTime = -1f;
+        private float _initialTime = 0f;
+
+        public float time
+        {
+            get
+            {
+                if (_proxySource != null) return _proxySource.time;
+                return _initialTime;
+            }
+            set
+            {
+                if (_proxySource != null) _proxySource.time = value;
+                _initialTime = value;
+            }
+        }
 
         private void Start()
         {
@@ -67,6 +82,11 @@ namespace SoundManager.VirtualListeners
             
             if (_proxySource.clip != clip) _proxySource.clip = clip;
             
+            if (_initialTime > 0.001f)
+            {
+                _proxySource.time = _initialTime;
+            }
+            
             _proxySource.Play();
         }
 
@@ -78,6 +98,7 @@ namespace SoundManager.VirtualListeners
             }
             ReleaseProxy();
             _lastOneShotEndTime = -1f; // Cancel OneShot wait logic
+            _initialTime = 0f;
         }
 
         public void PlayOneShot(AudioClip shotClip, float volumeScale = 1f)
