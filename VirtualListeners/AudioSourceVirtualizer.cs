@@ -14,6 +14,10 @@ namespace SoundManager.VirtualListeners
         private AudioSource _originalSource;
         private AudioSource _proxySource;
         private Transform _proxyTransform;
+
+        [Tooltip("If true, the closest listener is constantly updated. If false, it is locked when playback starts.")]
+        public bool updateListenerWhilePlaying = false;
+        private AudioListenerVirtual _cachedListener;
     
         // State tracking to detect changes
         private bool _wasPlaying;
@@ -54,7 +58,20 @@ namespace SoundManager.VirtualListeners
 
         private void PositionProxy()
         {
-            var closestListener = VirtualAudioManager.Instance.GetClosestListener(transform.position);
+            AudioListenerVirtual closestListener;
+
+            if (!updateListenerWhilePlaying && _originalSource.isPlaying)
+            {
+                if (!_wasPlaying || _cachedListener == null)
+                {
+                    _cachedListener = VirtualAudioManager.Instance.GetClosestListener(transform.position);
+                }
+                closestListener = _cachedListener;
+            }
+            else
+            {
+                closestListener = VirtualAudioManager.Instance.GetClosestListener(transform.position);
+            }
         
             if (closestListener.IsAlive())
             {
