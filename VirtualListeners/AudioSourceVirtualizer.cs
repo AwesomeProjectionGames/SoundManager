@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Audio;
 
 namespace SoundManager.VirtualListeners
 {
@@ -71,6 +72,41 @@ namespace SoundManager.VirtualListeners
             // Only swap clip if changed (optimization)
             if (_proxySource.clip != _originalSource.clip)
                 _proxySource.clip = _originalSource.clip;
+        }
+
+        public override AudioClip Clip { get => _originalSource.clip; set => _originalSource.clip = value; }
+        public override float Volume { get => _originalSource.volume; set => _originalSource.volume = value; }
+        public override float Pitch { get => _originalSource.pitch; set => _originalSource.pitch = value; }
+        public override float SpatialBlend { get => _originalSource.spatialBlend; set => _originalSource.spatialBlend = value; }
+        public override bool Loop { get => _originalSource.loop; set => _originalSource.loop = value; }
+        public override float Time { get => _originalSource.time; set => _originalSource.time = value; }
+        public override AudioMixerGroup OutputAudioMixerGroup { get => _originalSource.outputAudioMixerGroup; set => _originalSource.outputAudioMixerGroup = value; }
+        public override bool IsPlaying => _originalSource.isPlaying;
+        public override GameObject GameObject => gameObject;
+        public override Transform Transform => transform;
+        public override void Play()
+        {
+            _originalSource.Play();
+        }
+
+        public override void Stop()
+        {
+            _originalSource.Stop();
+        }
+
+        public override void Pause()
+        {
+            _originalSource.Pause();
+        }
+
+        public override void UnPause()
+        {
+            _originalSource.UnPause();
+        }
+
+        public override void PlayOneShot(AudioClip shotClip, float volumeScale = 1)
+        {
+            _originalSource.PlayOneShot(shotClip, volumeScale);
         }
     }
 }

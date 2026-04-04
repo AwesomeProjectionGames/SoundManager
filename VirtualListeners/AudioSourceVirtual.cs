@@ -9,6 +9,17 @@ namespace SoundManager.VirtualListeners
     /// </summary>
     public class AudioSourceVirtual : VirtualAudioSourceBase
     {
+        public override AudioClip Clip { get => clip; set => clip = value; }
+        public override float Volume { get => volume; set => volume = value; }
+        public override float Pitch { get => pitch; set => pitch = value; }
+        public override float SpatialBlend { get => spatialBlend; set => spatialBlend = value; }
+        public override bool Loop { get => loop; set => loop = value; }
+        public override float Time { get => time; set => time = value; }
+        public override AudioMixerGroup OutputAudioMixerGroup { get => outputAudioMixerGroup; set => outputAudioMixerGroup = value; }
+        public override bool IsPlaying { get => _proxySource != null && _proxySource.isPlaying; }
+        public override GameObject GameObject { get => gameObject; }
+        public override Transform Transform { get => transform; }
+        
         [Header("Audio Settings")]
         public AudioClip clip;
         [Range(0f, 1f)] public float volume = 1f;
@@ -54,7 +65,7 @@ namespace SoundManager.VirtualListeners
 
             // Determine if we should be active
             bool isProxyPlaying = _proxySource != null && _proxySource.isPlaying;
-            bool isOneShotActive = Time.time < _lastOneShotEndTime;
+            bool isOneShotActive = UnityEngine.Time.time < _lastOneShotEndTime;
             bool shouldBeActive = isProxyPlaying || isOneShotActive;
 
             // However, note that _proxySource.isPlaying turns false when clip ends (if not looping).
@@ -87,7 +98,7 @@ namespace SoundManager.VirtualListeners
             Gizmos.DrawWireSphere(transform.position, maxDistance);
         }
 
-        public void Play()
+        public override void Play()
         {
             EnsureProxy();
             SyncAudioProperties();
@@ -102,7 +113,7 @@ namespace SoundManager.VirtualListeners
             _proxySource.Play();
         }
 
-        public void Stop()
+        public override void Stop()
         {
             if (_proxySource != null)
             {
@@ -113,7 +124,23 @@ namespace SoundManager.VirtualListeners
             _initialTime = 0f;
         }
 
-        public void PlayOneShot(AudioClip shotClip, float volumeScale = 1f)
+        public override void Pause()
+        {
+            if (_proxySource != null)
+            {
+                _proxySource.Pause();
+            }
+        }
+
+        public override void UnPause()
+        {
+            if (_proxySource != null)
+            {
+                _proxySource.UnPause();
+            }
+        }
+
+        public override void PlayOneShot(AudioClip shotClip, float volumeScale = 1f)
         {
             if (shotClip == null) return;
 
@@ -129,7 +156,7 @@ namespace SoundManager.VirtualListeners
             float duration = shotClip.length / currentPitch;
             
             // Extend the active window
-            float endTime = Time.time + duration;
+            float endTime = UnityEngine.Time.time + duration;
             if (endTime > _lastOneShotEndTime)
             {
                 _lastOneShotEndTime = endTime;

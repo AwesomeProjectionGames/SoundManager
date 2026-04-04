@@ -1,9 +1,10 @@
 using AwesomeProjectionCoreUtils.Extensions;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace SoundManager.VirtualListeners
 {
-    public abstract class VirtualAudioSourceBase : MonoBehaviour
+    public abstract class VirtualAudioSourceBase : MonoBehaviour, IAudioSource
     {
         [Tooltip("If true, the closest listener is constantly updated. If false, it is locked when playback starts.")]
         public bool updateListenerWhilePlaying;
@@ -72,6 +73,22 @@ namespace SoundManager.VirtualListeners
                 _proxyTransform.localPosition = Vector3.zero;
             }
         }
+
+        public abstract AudioClip Clip { get; set; }
+        public abstract float Volume { get; set; }
+        public abstract float Pitch { get; set; }
+        public abstract float SpatialBlend { get; set; }
+        public abstract bool Loop { get; set; }
+        public abstract float Time { get; set; }
+        public abstract AudioMixerGroup OutputAudioMixerGroup { get; set; }
+        public abstract bool IsPlaying { get; }
+        public abstract GameObject GameObject { get; }
+        public abstract Transform Transform { get; }
+        public abstract void Play();
+        public abstract void Stop();
+        public abstract void Pause();
+        public abstract void UnPause();
+        public abstract void PlayOneShot(AudioClip shotClip, float volumeScale = 1);
     }
 }
 
