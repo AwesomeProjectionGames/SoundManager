@@ -33,6 +33,11 @@ namespace SoundManager
         /// </summary>
         public AudioSourceVirtual AudioSourceVirtual => audioSourceVirtual;
 
+        /// <summary>
+        /// Returns true if either the standard or virtual audio source is playing.
+        /// </summary>
+        public bool IsPlaying => (audioSource != null && audioSource.isPlaying) || (audioSourceVirtual != null && audioSourceVirtual.IsPlaying);
+
         private void Awake()
         {
             if (audioSource == null && audioSourceVirtual == null) audioSource = GetComponent<AudioSource>();
@@ -50,6 +55,15 @@ namespace SoundManager
                 ModifyAudio();
             if (audioSource != null) audioSource.Play();
             if (audioSourceVirtual != null) audioSourceVirtual.Play();
+        }
+
+        /// <summary>
+        /// Stop the audio source
+        /// </summary>
+        public void Stop()
+        {
+            if (audioSource != null) audioSource.Stop();
+            if (audioSourceVirtual != null) audioSourceVirtual.Stop();
         }
         /// <summary>
         /// Modify the audio source based on the modifier components
