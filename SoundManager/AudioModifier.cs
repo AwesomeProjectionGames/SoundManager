@@ -1,12 +1,14 @@
 using SoundManager.Modifier;
 using SoundManager.VirtualListeners;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace SoundManager
 {
     /// <summary>
     /// A class that modifies the audio source based on the AudioModifierComponents
     /// </summary>
+    [MovedFrom(false, sourceNamespace: "")]
     public class AudioModifier : MonoBehaviour
     {
         [Tooltip("The audio source to modify")]
@@ -55,15 +57,6 @@ namespace SoundManager
                 ModifyAudio();
             if (audioSource != null) audioSource.Play();
             if (audioSourceVirtual != null) audioSourceVirtual.Play();
-        }
-
-        /// <summary>
-        /// Stop the audio source
-        /// </summary>
-        public void Stop()
-        {
-            if (audioSource != null) audioSource.Stop();
-            if (audioSourceVirtual != null) audioSourceVirtual.Stop();
         }
         /// <summary>
         /// Modify the audio source based on the modifier components
