@@ -59,6 +59,14 @@ namespace SoundManager
             if (audioSourceVirtual != null) audioSourceVirtual.Play();
         }
         /// <summary>
+        /// Stops both the standard and virtual audio sources.
+        /// </summary>
+        public void Stop()
+        {
+            if (audioSource != null) audioSource.Stop();
+            if (audioSourceVirtual != null) audioSourceVirtual.Stop();
+        }
+        /// <summary>
         /// Modify the audio source based on the modifier components
         /// </summary>
         public void ModifyAudio()
